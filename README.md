@@ -1,28 +1,38 @@
-# Agentic AI Examples with Red Hat AI
+# Agentic AI Examples with Red Hat AI  
 
-Agentic AI examples with several Agentic Frameworks and LLMs on top of Red Hat AI platforms.
+Explore various **Agentic AI** frameworks and **LLMs** running on Red Hat AI platforms.  
 
-## Frameworks Examples
+## 🚀 Framework Examples  
 
-* [LangGraph](./frameworks/langgraph/)
-* [AutoGen](./frameworks/autogen/)
-* [PhiData](./frameworks/phidata/)
-* [SMolAgents](./frameworks/smolagents/)
-* [CrewAI (coming soon)](./frameworks/crewAI/)
-* [Bee (coming soon)](./frameworks/bee/)
+Check out different **Agentic AI** frameworks:  
 
-## LLMs Used in the Agentic AI Examples
+- [LangGraph](./frameworks/langgraph/)  
+- [AutoGen](./frameworks/autogen/)  
+- [PhiData](./frameworks/phidata/)  
+- [SMolAgents](./frameworks/smolagents/)  
+- [CrewAI (coming soon) ⏳](./frameworks/crewAI/)  
+- [Bee (coming soon) 🐝](./frameworks/bee/)  
 
-* [Granite3](https://huggingface.co/ibm-granite)
-* [Mistral](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)
-* [DeepSeek (coming soon)](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B)
+## 🧠 LLMs Used in the Agentic AI Examples  
 
-## Function Calling
+These examples utilize the following **Large Language Models (LLMs):**  
 
-Most of these Agentic examples rely on Function Calling, a feature that enhances large language models (LLMs) by enabling them to interact with external tools and APIs in a structured way, extending their capabilities beyond simple text generation. Function Calling equips LLMs with tools to perform actions such as making API calls, querying databases, executing code, or accessing external knowledge.
+- [Granite3](https://huggingface.co/ibm-granite)  
+- [Mistral](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)  
+- [DeepSeek (coming soon) 🔎](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B)  
 
-To enable Function Calling in Red Hat AI, refer to [this article](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).
+## 🔗 Function Calling  
 
-## Contribute
+Many of these **Agentic AI** examples rely on **Function Calling**, a feature that enables LLMs to interact with external tools and APIs in a structured way. This allows models to:  
 
-You want to contribute with the new examples or your framework is not present? Bring your own agentic example, PRs are welcome (and appreciated :D)
+- Make API calls  
+- Query databases  
+- Execute code  
+- Access external knowledge  
+
+
+To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).  
+
+## 🤝❤️ Contribute  
+
+Want to add a new example or missing framework? 🎉 **Bring your own agentic example!** PRs are always welcome (and much appreciated!😌).  
