@@ -36,3 +36,8 @@ To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-
 ## 🤝❤️ Contribute  
 
 Want to add a new example or missing framework? 🎉 **Bring your own agentic example!** PRs are always welcome (and much appreciated!😌).  
+
+
+## 🎓 Explore More: Links We Love
+
+- [ARCH](https://archgw.com/) - Intelligent gateway for agents
