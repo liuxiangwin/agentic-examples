@@ -11,6 +11,7 @@ Check out different **Agentic AI** frameworks:
 - [PhiData](./frameworks/phidata/)  
 - [SMolAgents](./frameworks/smolagents/)  
 - [CrewAI (coming soon) ⏳](./frameworks/crewAI/)  
+- [Quarkus LangChain4j](./frameworks/quarkus-langchain4j/)
 - [Bee (coming soon) 🐝](./frameworks/bee/)  
 
 ## 🧠 LLMs Used in the Agentic AI Examples  
