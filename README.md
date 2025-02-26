@@ -31,14 +31,14 @@ Many of these **Agentic AI** examples rely on **Function Calling**, a feature th
 - Execute code  
 - Access external knowledge  
 
-
 To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).  
 
 ## 🤝❤️ Contribute  
 
 Want to add a new example or missing framework? 🎉 **Bring your own agentic example!** PRs are always welcome (and much appreciated!😌).  
 
-
 ## 🎓 Explore More: Links We Love
 
-- [ARCH](https://archgw.com/) - Intelligent gateway for agents
+If you want to explore more and dig a bit more deeper, take a look to the following links:
+
+- [Links we Love](./docs/links-we-love.md)
