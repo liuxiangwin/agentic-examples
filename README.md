@@ -12,7 +12,8 @@ Check out different **Agentic AI** frameworks:
 - [SMolAgents](./frameworks/smolagents/)  
 - [CrewAI (coming soon) ⏳](./frameworks/crewAI/)  
 - [Quarkus LangChain4j](./frameworks/quarkus-langchain4j/)
-- [Bee (coming soon) 🐝](./frameworks/bee/)  
+- [Bee (coming soon) 🐝](./frameworks/bee/)
+- [Llama Stack (coming soon)](./frameworks/llama-stack)
 
 ## 🧠 LLMs Used in the Agentic AI Examples  
 
@@ -31,7 +32,17 @@ Many of these **Agentic AI** examples rely on **Function Calling**, a feature th
 - Execute code  
 - Access external knowledge  
 
-To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).  
+To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).
+
+## 🦆 Model Context Protocol (MCP)
+
+MCP is an open protocol that standardizes how applications provide context to LLMs, enabling agent-based workflows and integrations. It offers:
+
+- **Pre-built integrations** for seamless LLM connectivity  
+- **Flexibility** to switch between LLM providers and vendors  
+- **Security best practices** for keeping data within your infrastructure
+
+If you want to know more, follow [this guide](./frameworks/mcp/)
 
 ## 🤝❤️ Contribute  
 
