@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
+import os
 
 # Backend API URL
-BACKEND_URL = "http://localhost:8080"  # Update this if deployed elsewhere
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080")
 
 def check_api_status():
     """Check if the backend API is up and running."""

@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Environment Variables
 INFERENCE_SERVER_URL = os.getenv("API_URL_GRANITE")  # Granite AI Server URL
-MODEL_NAME = "granite-3-8b-instruct"  # Model name for LLM
+MODEL_NAME = os.getenv("MODEL_NAME")  # Model name for LLM
 API_KEY = os.getenv("API_KEY_GRANITE")  # API Key for authentication
 
 # Read debug mode from environment variable (default: False)
@@ -126,34 +126,39 @@ def get_tools():
 
 @app.post("/ask", response_model=QueryResponse)
 def ask_question(request: QueryRequest):
-    """Handles user queries using the LangGraph REACT agent."""
-    logging.info(f"Received user query: {request.query}")
+    """Handles user queries using the LangGraph REACT agent step-by-step."""
+    logging.info(f"-> Received user query: {request.query}")
 
     inputs = {"messages": [("user", request.query)]}
     collected_responses = []
-    
+    tool_calls = []
+
+    # 🚀 **Iterate through the agent steps** (ReAct cycle)
     for step in graph.stream(inputs, stream_mode="values"):
         message = step["messages"][-1]  # Get latest response
 
+        # If it's a tool call, store it separately
         if "<tool_call>" in str(message):
-            logging.info(f"🛠 Tool Call: {message}")
-            collected_responses.append(str(message))  # Store tool calls
+            logging.info(f"-> Tool Call Detected: {message}")
+            tool_calls.append(str(message))  # Collect tool calls
         
+        # If it's the final response, store it
         elif isinstance(message, tuple):
-            logging.info(f"✅ Final Response: {message[1]}")
-            collected_responses.append(str(message[1]))  # Store final answer
+            logging.info(f"-> Final Response: {message[1]}")
+            collected_responses.append(str(message[1]))
         
+        # If it's an intermediate step, store reasoning
         else:
-            logging.info(f"🔍 Reasoning Step: {message.content}")
-            collected_responses.append(str(message.content))  # Store intermediate thoughts
+            logging.info(f"-> Intermediate Thought: {message.content}")
+            collected_responses.append(str(message.content))
 
-        # ✅ **Force step-by-step execution**
-        logging.info(f"📝 Collected Responses So Far:\n{collected_responses}")
+        # 🔥 Force **sequential** execution
+        logging.info(f"🔄 Current Progress:\n{collected_responses + tool_calls}")
 
-    # ✅ **Ensure tool results are used before final answer**
-    structured_response = "\n\n".join(collected_responses).strip()
+    # **Ensure tool results appear before final response**
+    structured_response = "\n\n".join(tool_calls + collected_responses).strip()
 
-    logging.info(f"🟢 Final Structured Response:\n{structured_response}")
+    logging.info(f"-> Final Structured Response:\n{structured_response}")
     return {"response": structured_response}
 
 
