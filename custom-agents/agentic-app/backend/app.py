@@ -32,6 +32,9 @@ INFERENCE_SERVER_URL = os.getenv("API_URL_GRANITE")  # Granite AI Server URL
 MODEL_NAME = "granite-3-8b-instruct"  # Model name for LLM
 API_KEY = os.getenv("API_KEY_GRANITE")  # API Key for authentication
 
+# Read debug mode from environment variable (default: False)
+DEBUG_MODE = os.getenv("DEBUG_MODE", "false").lower() == "true"
+
 # Initialize LLM with Granite AI settings
 llm = ChatOpenAI(
     openai_api_key=API_KEY,
@@ -77,7 +80,7 @@ def get_stock_price(ticker: str):
     try:
         stock = yf.Ticker(ticker)
         price = stock.history(period="1d")["Close"].iloc[-1]
-        return f"The latest closing price of {ticker} is ${price:.2f}"
+        return f"The latest closing price of {ticker} is **${price:.2f}**."
     except Exception as e:
         logging.error(f"YFinance tool failed: {repr(e)}")
         return f"Failed to retrieve stock price for {ticker}. Error: {repr(e)}"
@@ -89,7 +92,7 @@ tools = [duckduckgo_search, python_repl, get_stock_price]
 
 ### LangGraph REACT Agent ###
 # Create LangGraph REACT agent with integrated tools
-graph = create_react_agent(llm, tools=tools, debug=False)
+graph = create_react_agent(llm, tools=tools, debug=DEBUG_MODE)
 
 # Request Model for API calls
 class QueryRequest(BaseModel):
@@ -109,19 +112,30 @@ def read_health():
 def ask_question(request: QueryRequest):
     """Handles user queries using the LangGraph REACT agent."""
     logging.info(f"Received user query: {request.query}")
-    
+
     inputs = {"messages": [("user", request.query)]}
-    response_messages = []
-    
+    tool_responses = []
+    final_response = ""
+
+    # Stream responses from LangGraph
     for s in graph.stream(inputs, stream_mode="values"):
         message = s["messages"][-1]
-        if isinstance(message, tuple):
-            response_messages.append(str(message))
+
+        # Collect tool responses separately
+        if "<tool_call>" in str(message):
+            tool_responses.append(str(message))
+
+        # Collect final response separately
+        elif isinstance(message, tuple):
+            final_response = str(message[1])
         else:
-            response_messages.append(str(message.content))
+            final_response = str(message.content)
+
+    # Structure the response properly
+    structured_response = "\n\n".join(tool_responses) + "\n\n" + final_response.strip()
     
-    logging.info(f"Agent response: {' '.join(response_messages)}")
-    return {"response": "\n".join(response_messages)}
+    logging.info(f"Agent response: {structured_response}")
+    return {"response": structured_response}
 
 ### Launch the FastAPI server ###
 if __name__ == "__main__":

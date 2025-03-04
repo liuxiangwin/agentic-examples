@@ -6,8 +6,8 @@ import os
 FASTAPI_URL = os.getenv("FASTAPI_URL", "http://localhost:8080")
 
 # Set up Streamlit app
-st.set_page_config(page_title="Agentic App Frontend", page_icon="🤖")
-st.title("🤖 Agentic App Frontend")
+st.set_page_config(page_title="Agentic AI App", page_icon="🤖")
+st.title("🤖 Agentic AI App")
 st.write("Ask me anything, and I will retrieve the answer from the Agentic API!")
 
 # Initialize session state for chat history
@@ -38,10 +38,14 @@ if user_input:
     except Exception as e:
         response = {"response": f"Error: {str(e)}"}
 
-    # Display API response
+    # Display API response with proper formatting
     assistant_response = response.get("response", "Error retrieving response")
-    st.chat_message("assistant").markdown(assistant_response)
-    st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+
+    # Ensure markdown formatting and clear separation of tool output and final response
+    formatted_response = f"```\n{assistant_response}\n```"  # Show tool call and response clearly
+
+    st.chat_message("assistant").markdown(formatted_response)
+    st.session_state.messages.append({"role": "assistant", "content": formatted_response})
 
     st.session_state["input_disabled"] = False  # Re-enable input
     st.rerun()
