@@ -19,3 +19,5 @@ streamlit run app.py
 ![Agentic App](../../../docs/images/01-02-agentic-app.png)
 
 * Usage of YFinance to extract Stock information:
+
+![Agentic App](../../../docs/images/01-03-agentic-app.png)
