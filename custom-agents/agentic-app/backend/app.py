@@ -108,6 +108,15 @@ def read_health():
     """Health check endpoint to verify the API is running."""
     return {"message": "Status:OK"}
 
+@app.get("/tools")
+def get_tools():
+    """Returns the list of enabled tools in the backend."""
+    tool_names = []
+    for tool in tools:
+        tool_names.append(tool.name)
+    return {"tools": tool_names}
+
+
 @app.post("/ask", response_model=QueryResponse)
 def ask_question(request: QueryRequest):
     """Handles user queries using the LangGraph REACT agent."""

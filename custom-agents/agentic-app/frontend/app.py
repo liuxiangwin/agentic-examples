@@ -1,51 +1,56 @@
 import streamlit as st
 import requests
-import os
 
-# Define FastAPI Backend URL
-FASTAPI_URL = os.getenv("FASTAPI_URL", "http://localhost:8080")
+# Backend API URL
+BACKEND_URL = "http://localhost:8080"  # Update if deployed elsewhere
 
-# Set up Streamlit app
-st.set_page_config(page_title="Agentic AI App", page_icon="🤖")
-st.title("🤖 Agentic AI App")
-st.write("Ask me anything, and I will retrieve the answer from the Agentic API!")
-
-# Initialize session state for chat history
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "Hello! How can I assist you today?"}]
-if "input_disabled" not in st.session_state:
-    st.session_state["input_disabled"] = False
-
-# Display chat history
-for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
-
-# Handle user input
-user_input = st.chat_input(disabled=st.session_state["input_disabled"])
-if user_input:
-    st.session_state["input_disabled"] = True  # Disable input while processing
-    st.session_state.messages.append({"role": "user", "content": user_input})
-    st.chat_message("user").markdown(user_input)
-
-    # Send request to FastAPI backend
-    response = {"response": "Error: Unable to connect to FastAPI server"}
+### ✅ Function to Fetch Enabled Tools
+def get_enabled_tools():
+    """Fetch the list of enabled tools from the backend."""
     try:
-        api_response = requests.post(f"{FASTAPI_URL}/ask", json={"query": user_input}, timeout=10)
-        if api_response.status_code == 200:
-            response = api_response.json()
-        else:
-            response = {"response": f"Error: Received status code {api_response.status_code}"}
+        response = requests.get(f"{BACKEND_URL}/tools")
+        if response.status_code == 200:
+            return response.json().get("tools", [])
+        return ["Failed to fetch tools"]
     except Exception as e:
-        response = {"response": f"Error: {str(e)}"}
+        return [f"Error: {e}"]
 
-    # Display API response with proper formatting
-    assistant_response = response.get("response", "Error retrieving response")
+### ✅ Streamlit UI Setup
+st.set_page_config(page_title="Agentic App", layout="wide")
 
-    # Ensure markdown formatting and clear separation of tool output and final response
-    formatted_response = f"```\n{assistant_response}\n```"  # Show tool call and response clearly
+st.title("🤖 Agentic App Frontend")
 
-    st.chat_message("assistant").markdown(formatted_response)
-    st.session_state.messages.append({"role": "assistant", "content": formatted_response})
+# Sidebar for Tools Display
+with st.sidebar:
+    st.subheader("🔧 Enabled Tools")
+    tools = get_enabled_tools()
+    
+    if tools:
+        for tool in tools:
+            st.write(f"✅ {tool}")
+    else:
+        st.write("⚠️ No tools available")
 
-    st.session_state["input_disabled"] = False  # Re-enable input
-    st.rerun()
+# User Query Input
+st.subheader("💬 Chat with Agent")
+user_query = st.text_input("Enter your query:", key="user_input")
+
+if st.button("Ask"):
+    if user_query.strip():
+        with st.spinner("Processing..."):
+            try:
+                response = requests.post(
+                    f"{BACKEND_URL}/ask", json={"query": user_query}
+                ).json()
+                
+                agent_response = response.get("response", "No response")
+                
+                # Display the response
+                st.subheader("🤖 Agent Response")
+                st.markdown(agent_response)
+
+            except Exception as e:
+                st.error(f"Error contacting the backend: {e}")
+    else:
+        st.warning("Please enter a query before asking.")
+
