@@ -108,6 +108,13 @@ def read_health():
     """Health check endpoint to verify the API is running."""
     return {"message": "Status:OK"}
 
+@app.get("/config")
+def get_config():
+    """Expose backend configuration like the model name."""
+    return {
+        "model_name": MODEL_NAME
+    }
+
 @app.get("/tools")
 def get_tools():
     """Returns the list of enabled tools in the backend."""
@@ -123,28 +130,32 @@ def ask_question(request: QueryRequest):
     logging.info(f"Received user query: {request.query}")
 
     inputs = {"messages": [("user", request.query)]}
-    tool_responses = []
-    final_response = ""
-
-    # Stream responses from LangGraph
-    for s in graph.stream(inputs, stream_mode="values"):
-        message = s["messages"][-1]
-
-        # Collect tool responses separately
-        if "<tool_call>" in str(message):
-            tool_responses.append(str(message))
-
-        # Collect final response separately
-        elif isinstance(message, tuple):
-            final_response = str(message[1])
-        else:
-            final_response = str(message.content)
-
-    # Structure the response properly
-    structured_response = "\n\n".join(tool_responses) + "\n\n" + final_response.strip()
+    collected_responses = []
     
-    logging.info(f"Agent response: {structured_response}")
+    for step in graph.stream(inputs, stream_mode="values"):
+        message = step["messages"][-1]  # Get latest response
+
+        if "<tool_call>" in str(message):
+            logging.info(f"🛠 Tool Call: {message}")
+            collected_responses.append(str(message))  # Store tool calls
+        
+        elif isinstance(message, tuple):
+            logging.info(f"✅ Final Response: {message[1]}")
+            collected_responses.append(str(message[1]))  # Store final answer
+        
+        else:
+            logging.info(f"🔍 Reasoning Step: {message.content}")
+            collected_responses.append(str(message.content))  # Store intermediate thoughts
+
+        # ✅ **Force step-by-step execution**
+        logging.info(f"📝 Collected Responses So Far:\n{collected_responses}")
+
+    # ✅ **Ensure tool results are used before final answer**
+    structured_response = "\n\n".join(collected_responses).strip()
+
+    logging.info(f"🟢 Final Structured Response:\n{structured_response}")
     return {"response": structured_response}
+
 
 ### Launch the FastAPI server ###
 if __name__ == "__main__":
