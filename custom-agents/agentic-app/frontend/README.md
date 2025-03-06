@@ -10,14 +10,14 @@ streamlit run app.py
 
 ### Screenshots
 
-* Usage of Python Tool Calculator:
+* Example 1:
 
 ![Agentic App](../../../docs/images/01-01-agentic-app.png)
 
-* Usage of Internet Search (DuckDuckGo):
+* Example 2:
 
 ![Agentic App](../../../docs/images/01-02-agentic-app.png)
 
-* Usage of YFinance to extract Stock information:
+* Example 3:
 
 ![Agentic App](../../../docs/images/01-03-agentic-app.png)
