@@ -64,7 +64,7 @@ if st.button("Ask"):
     if user_query.strip():
         with st.spinner("Processing..."):
             response = requests.post(f"{BACKEND_URL}/ask", json={"query": user_query}).json()
-            st.write("### 📝 Agent Response:")
+            st.write("### 📝 Agentic Response:")
             st.write(response.get("response", "No response"))
     else:
         st.warning("⚠️ Please enter a valid query.")
