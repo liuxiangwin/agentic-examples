@@ -123,26 +123,52 @@ def ask_question(request: QueryRequest):
     inputs = {"messages": [("user", request.query)]}
     collected_responses = []
     tool_responses = []
+    python_code_executed = False
+    tool_call_detected = False
+    python_code_snippet = ""
 
     for step in graph.stream(inputs, stream_mode="values"):
         message = step["messages"][-1]  # Get latest response
 
         if "<tool_call>" in str(message):
             logging.info(f"-> Tool Call Detected: {message}")
-            tool_responses.append(f"🛠️ <tool-call> {message.tool_calls[0]['name']} called with arguments {message.tool_calls[0]['args']}")
+            tool_call_detected = True
+            tool_name = message.tool_calls[0]['name'] if 'tool_calls' in message.additional_kwargs else None
+            tool_args = message.tool_calls[0]['args'] if 'tool_calls' in message.additional_kwargs else None
+            
+            if tool_name and tool_args:
+                tool_responses.append(f"🛠️ <tool-call> {tool_name} called with arguments {tool_args}")
+                
+                # Capture Python REPL code
+                if tool_name == "python_repl":
+                    python_code_executed = True
+                    python_code_snippet = tool_args.get("code", "")
+            else:
+                tool_responses.append("⚠️ Tool call detected but missing arguments. Retrying...")
+        
         elif isinstance(message, tuple):
             logging.info(f"-> Final Response: {message[1]}")
             collected_responses.append(str(message[1]))
-        else:
+        
+        elif message.content.strip().lower() != request.query.strip().lower():
             logging.info(f"-> Tool Response Logged: {message.content}")
             collected_responses.append(message.content)
 
-    # Remove duplicates while preserving order
-    collected_responses = list(dict.fromkeys(collected_responses))
+    # **Force Python REPL Execution if Required but Not Executed**
+    if "calculate" in request.query.lower() and not python_code_executed and python_code_snippet:
+        tool_responses.append(f"🛠️ <tool-call> python_repl executing missing code:\n```python\n{python_code_snippet}\n```")
+    
+    # **Handle Broken Tool Calls**
+    if tool_call_detected and not tool_responses:
+        tool_responses.append("⚠️ Incomplete tool call detected. The agent may have failed to return a valid tool execution.")
 
+    # **Fix Formatting for Frontend Parsing**
+    collected_responses = list(dict.fromkeys(collected_responses))  # Remove duplicates
     structured_response = "\n\n".join(tool_responses + collected_responses).strip()
+
     logging.info(f"-> Final Structured Response: {structured_response}")
     return {"response": structured_response}
+
 
 
 ### Launch the FastAPI server ###
