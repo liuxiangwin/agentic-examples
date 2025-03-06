@@ -29,16 +29,16 @@ spec:
             - containerPort: 8080
               protocol: TCP
           env:
-            - name: API_KEY_GRANITE
+            - name: API_KEY
               valueFrom:
                 secretKeyRef:
                   name: agentic-app-be-secret
-                  key: API_KEY_GRANITE
-            - name: API_URL_GRANITE
+                  key: API_KEY
+            - name: API_URL
               valueFrom:
                 secretKeyRef:
                   name: agentic-app-be-secret
-                  key: API_URL_GRANITE
+                  key: API_URL
             - name: MODEL_NAME
               valueFrom:
                 secretKeyRef:
