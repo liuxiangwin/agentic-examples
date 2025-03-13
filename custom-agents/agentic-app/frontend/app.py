@@ -9,7 +9,7 @@ def check_api_status():
     """Check if the backend API is up and running."""
     try:
         response = requests.get(f"{BACKEND_URL}/health")
-        return "API Status: Ready 🟢" if response.status_code == 200 else "🔴 API Status: Down"
+        return "API Status: Ready 🟢" if response.status_code == 200 else "API Status: Down 🔴"
     except Exception:
         return "API Status: Unreachable 🔴"
 
