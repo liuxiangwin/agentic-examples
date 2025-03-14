@@ -15,15 +15,16 @@ Check out different **Agentic AI** frameworks:
 - [Bee (coming soon) 🐝](./frameworks/bee/)
 - [Llama Stack (coming soon)](./frameworks/llama-stack)
 
-## 🧠 LLMs Used in the Agentic AI Examples  
+## Agentic AI Apps
 
-These examples utilize the following **Large Language Models (LLMs):**  
+Check out the **Agentic AI Apps** ready to be deployed!:
 
-- [Granite3](https://huggingface.co/ibm-granite)  
-- [Mistral](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)  
-- [DeepSeek (coming soon) 🔎](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B)  
+- [Agentic AI App LangGraph](./agentic-apps/agentic-app-langgraph/)
+- [Agentic AI App LlamaStack with MCP](./agentic-apps/agentic-app-llamastack/)
 
-## 🔗 Function Calling  
+## Tools
+
+### 🔗 Function Calling  
 
 Many of these **Agentic AI** examples rely on **Function Calling**, a feature that enables LLMs to interact with external tools and APIs in a structured way. This allows models to:  
 
@@ -34,7 +35,7 @@ Many of these **Agentic AI** examples rely on **Function Calling**, a feature th
 
 To enable Function Calling in **Red Hat AI**, follow [this guide](https://ai-on-openshift.io/odh-rhoai/enable-function-calling/).
 
-## 🦆 Model Context Protocol (MCP)
+### 🦆 Model Context Protocol (MCP)
 
 MCP is an open protocol that standardizes how applications provide context to LLMs, enabling agent-based workflows and integrations. It offers:
 
@@ -42,7 +43,15 @@ MCP is an open protocol that standardizes how applications provide context to LL
 - **Flexibility** to switch between LLM providers and vendors  
 - **Security best practices** for keeping data within your infrastructure
 
-If you want to know more, follow [this guide](./frameworks/mcp/)
+If you want to know more, follow [this guide](./tools/mcp/)
+
+## 🧠 LLMs Used in the Agentic AI Examples  
+
+These examples utilize the following **Large Language Models (LLMs):**  
+
+- [Granite3](https://huggingface.co/ibm-granite)  
+- [Mistral](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)  
+- [DeepSeek (coming soon) 🔎](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B)
 
 ## 🤝❤️ Contribute  
 
