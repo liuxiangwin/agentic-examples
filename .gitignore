@@ -1,5 +1,5 @@
 # Ad-hoc
-#agentic-apps/agentic-app-langgraph/deploy-demo/secret-patch.yaml
+agentic-apps/agentic-app-langgraph/deploy-demo/secret-patch.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
