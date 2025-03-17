@@ -1,0 +1,100 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: agentic-app-fe
+  labels:
+    app: agentic-app-fe
+    app.kubernetes.io/component: agentic-app-fe
+    app.kubernetes.io/instance: agentic-app-fe
+    app.kubernetes.io/name: agentic-app-fe
+    app.kubernetes.io/part-of: agentic-app-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agentic-app-fe
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: agentic-app-fe
+        deployment: agentic-app-fe
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - name: agentic-app-fe
+          image: quay.io/rcarrata/agentic-app-fe:v1
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: BACKEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: agentic-app-fe-secret
+                  key: BACKEND_URL
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: oauth-proxy
+          ports:
+            - name: https
+              containerPort: 9091
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: oauth-tls
+              mountPath: /etc/tls/private
+            - name: oauth-proxy
+              mountPath: /etc/proxy/secrets
+            - name: ocp-injected-certs
+              mountPath: /etc/proxy/certs
+          terminationMessagePolicy: File
+          image: quay.io/openshift/origin-oauth-proxy
+          args:
+            - '-provider=openshift'
+            - '-pass-basic-auth=false'
+            - '-https-address=:9091'
+            - '-http-address='
+            - '-email-domain=*'
+            - '-upstream=http://localhost:8501'
+            - '-openshift-sar={"namespace": "agentic-zone", "resource": "routes", "name": "agentic-app-fe", "verb": "get"}'
+            - '-openshift-delegate-urls={"/": {"resource": "namespaces", "verb": "get"}}'
+            - '-tls-cert=/etc/tls/private/tls.crt'
+            - '-tls-key=/etc/tls/private/tls.key'
+            - '-client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token'
+            - '-cookie-secret-file=/etc/proxy/secrets/session_secret'
+            - '-openshift-service-account=agentic-sa'
+            - '-openshift-ca=/etc/pki/tls/cert.pem'
+            - '-openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
+            - '-openshift-ca=/etc/proxy/certs/ca-bundle.crt'
+            - '-skip-auth-regex=^/metrics'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+      serviceAccountName: agentic-sa
+      volumes:
+        - name: oauth-tls
+          secret:
+            secretName: oauth-tls
+        - name: oauth-proxy
+          secret:
+            secretName: oauth-proxy
+        - name: ocp-injected-certs
+          configMap:
+            name: ocp-injected-certs
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

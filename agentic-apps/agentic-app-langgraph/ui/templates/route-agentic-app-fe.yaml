@@ -15,8 +15,8 @@ spec:
     name: agentic-app-fe
     weight: 100
   port:
-    targetPort: 8000-tcp
+    targetPort: oauth-proxy
   tls:
-    termination: edge
+    termination: reencrypt
     insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
