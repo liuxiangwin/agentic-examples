@@ -45,15 +45,15 @@ Just start asking questions and feel all the power of Agentic AI in your hands!
 
 * Example Prompt1 (Finantial Analyst): `who won the last NBA Championship in 2024? What was the score result?`
 
-<img align="center" width="500" src="../../docs/images/01-07-agentic-app.png">
+<img align="center" width="750" src="../../docs/images/01-07-agentic-app.png">
 
 * Example Prompt2 (Finantial Analyst): `If I sell 100 Tesla shares today to buy IBM shares instead, how many shares will I get?`
 
-<img align="center" width="500" src="../../docs/images/01-05-agentic-app.png">
+<img align="center" width="750" src="../../docs/images/01-05-agentic-app.png">
 
 * Example Prompt3 (Python Calculator): `Calculate the area of a circle with a radius of 7 meters and then determine how many such circles would fit into a square with a side length of 100 meters`:
 
-<img align="center" width="500" src="../../docs/images/01-06-agentic-app.png"> 
+<img align="center" width="750" src="../../docs/images/01-06-agentic-app.png"> 
 
 ### How to check the Agentic AI Logs?
 
@@ -65,4 +65,4 @@ kubectl -n agentic-demo-2 logs deploy/agentic-app-be --tail=100
 
 * Or you can use the UI as well:
 
-<img align="center" width="950" src="../../docs/images/01-08-agentic-app.png">
+<img align="center" width="750" src="../../docs/images/01-08-agentic-app.png">
