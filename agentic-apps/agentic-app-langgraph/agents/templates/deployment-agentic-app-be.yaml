@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/component: agentic-app-be
     app.kubernetes.io/instance: agentic-app-be
     app.kubernetes.io/name: agentic-app-be
-    app.kubernetes.io/part-of: agentic-app-be
+    app.kubernetes.io/part-of: agentic-app
 spec:
   replicas: 1
   selector:
@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: agentic-app-be
-          image: quay.io/rcarrata/agentic-app-be:v1
+          image: quay.io/rcarrata/agentic-app-be:v3
           ports:
             - containerPort: 8080
               protocol: TCP
