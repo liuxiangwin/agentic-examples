@@ -53,13 +53,13 @@ with st.sidebar:
     for tool in tools:
         st.write(f"✅ {tool}")
 
-    # Logs
-    with st.expander("📜 Execution Logs", expanded=False):
-        if st.session_state["logs"]:
-            for log in st.session_state["logs"]:
-                st.write(log)
-        else:
-            st.write("No logs yet.")
+    # # Logs
+    # with st.expander("📜 Execution Logs", expanded=False):
+    #     if st.session_state["logs"]:
+    #         for log in st.session_state["logs"]:
+    #             st.write(log)
+    #     else:
+    #         st.write("No logs yet.")
 
 # Chat input and response display
 st.subheader("💬 Ask a Question")
