@@ -1,0 +1,46 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    config.openshift.io/inject-trusted-cabundle: "true"
+  name: ocp-injected-certs
+---
+apiVersion: v1
+data:
+  session_secret: "c3VwZXJzZWNyZXQK"
+kind: Secret
+metadata:
+  name: oauth-proxy
+type: Opaque
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: oauth-proxy-agentic-sa
+rules:
+  - verbs:
+      - create
+    apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+  - verbs:
+      - create
+    apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: oauth-proxy-agentic-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  name: oauth-proxy-agentic-sa
+  kind: ClusterRole
+subjects:
+  - kind: ServiceAccount
+    name: agentic-sa
+    namespace: agentic-zone
