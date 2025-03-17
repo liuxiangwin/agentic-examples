@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Prompt for user input
-read -p "Enter API Key: " api_key
 read -p "Enter API URL: " api_url
+read -p "Enter API Key: " api_key
 read -p "Enter Model Name: " model_name
 read -p "Enter Namespace (default: agentic-demo): " namespace
 
@@ -40,12 +40,28 @@ update_namespace() {
     else
       sed -i "s/namespace: [a-zA-Z0-9_-]*/namespace: ${namespace}/g" "$file"
     fi
-    echo "✅ Namespace updated in '$file'."
+    echo "Updated namespace in '$file'."
   else
-    echo "⚠️ WARNING: '$file' not found. Skipping namespace update."
+    echo "WARNING: '$file' not found. Skipping namespace update."
   fi
 }
 
 # Update namespace in required files
 update_namespace "deploy-demo/kustomization.yaml"
 update_namespace "deploy-demo/patch-crb.yaml"
+
+# Create namespace if it does not exist
+echo "🚀 Creating namespace '${namespace}' (if not already present)..."
+kubectl create ns $namespace --dry-run=client -o yaml | kubectl apply -f -
+
+# Apply Kustomize configuration
+echo "📦 Applying Kustomize configuration in namespace '${namespace}'..."
+kubectl apply -k deploy-demo
+
+# Final messages
+echo ""
+echo "🎉 Deployment completed successfully!"
+echo "📌 Namespace '${namespace}' has been set in all required files."
+echo "✅ Kustomize configurations have been applied."
+echo "🔍 Verify deployment with: kubectl get all -n ${namespace}"
+echo "📜 Check logs with: kubectl logs -l app=agentic-app-be -n ${namespace} --tail=50"
