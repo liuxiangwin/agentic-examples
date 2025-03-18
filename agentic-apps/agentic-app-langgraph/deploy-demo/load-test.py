@@ -6,13 +6,17 @@ from selenium.webdriver.support import expected_conditions as EC
 import concurrent.futures
 import time
 
+# Ask for the URL and query input
+app_url = input("Enter the app URL: ")
+query_text = input("Enter the query for the app: ")
+
 # Define the Selenium test function
 def run_selenium_test(instance_id):
     options = webdriver.ChromeOptions()
     #options.add_argument("--headless")  # Run in headless mode for automation
     driver = webdriver.Chrome(options=options)
 
-    driver.get("xxx")  # Ensure Streamlit app is running
+    driver.get(app_url)  # Use the user-provided URL
 
     try:
         # Wait for API Status text to appear
@@ -28,7 +32,7 @@ def run_selenium_test(instance_id):
         input_field = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//input[@type='text']"))
         )
-        input_field.send_keys(f"Give me IBM stock today?")
+        input_field.send_keys(query_text)
         print(f"Instance {instance_id}: Query entered successfully.")
     except Exception as e:
         print(f"Instance {instance_id}: Error finding input field: {e}")
@@ -62,8 +66,9 @@ def run_selenium_test(instance_id):
     driver.quit()
 
 
-# Run 10 tests in parallel
+# Run 10 tests in parallel with default workers as 5
 if __name__ == "__main__":
-    with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
+    num_workers = int(input("Enter the number of workers (default 5): ") or 5)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = [executor.submit(run_selenium_test, i) for i in range(1, 11)]
         concurrent.futures.wait(futures)  # Wait for all tests to complete
