@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: agentic-app-fe
-          image: quay.io/rcarrata/agentic-app-fe:v1
+          image: quay.io/rcarrata/agentic-app-fe:v3
           ports:
             - containerPort: 8000
               protocol: TCP
