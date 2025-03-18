@@ -43,11 +43,11 @@ Enter Namespace (default: agentic-demo): agentic-demo-rcarrata
 
 Just start asking questions and feel all the power of Agentic AI in your hands!
 
-* Example Prompt1 (Finantial Analyst): `who won the last NBA Championship in 2024? What was the score result?`
+* Example Prompt1 (Web Search): `who won the last NBA Championship in 2024? What was the score result?`
 
 <img align="center" width="500" src="../../docs/images/01-07-agentic-app.png">
 
-* Example Prompt2 (Finantial Analyst): `If I sell 100 Tesla shares today to buy IBM shares instead, how many shares will I get?`
+* Example Prompt2 (Finantial Analyst): `If I sell 100 Starbucks shares today to buy GameStop shares instead, how many shares will I get?`
 
 <img align="center" width="500" src="../../docs/images/01-05-agentic-app.png">
 
